@@ -1,25 +1,35 @@
-#Función para calcular la edad de un estudiante a partir de su fecha de nacimiento (YYYY/MM/DD)
+use upc;
+
+drop function if exists GetStudentAge
+#Función para calcular la edad de un estudiante a partir de su fecha de nacimiento (YYYY-MM-DD)
 DELIMITER //
 CREATE FUNCTION GetStudentAge(birthday DATE)
 RETURNS INT
 NO SQL
 BEGIN
     DECLARE age INT;
-    SET age = TIMESTAMPDIFF(YEAR, dob, CURDATE());
+    SET age = TIMESTAMPDIFF(YEAR, birthday, CURDATE());
     RETURN age;
 END//
 DELIMITER ;
 #Función para obtener el número total de cursos en los que está inscrito un estudiante
+drop function if exists GetStudentInfo
 DELIMITER //
-CREATE FUNCTION GetStudentCourseCount(student_id INT)
-RETURNS INT
+CREATE FUNCTION GetStudentInfo(student_id INT)
+RETURNS VARCHAR(255)
 READS SQL DATA
 BEGIN
     DECLARE course_count INT;
-    SELECT COUNT(*) INTO course_count
-    FROM Student_course
-    WHERE id_student = student_id;
-    RETURN course_count;
+    DECLARE student_name VARCHAR(100);
+
+    SELECT COUNT(*), su.name INTO course_count, student_name
+    FROM Student_course st
+    JOIN Student su
+    ON st.id_student = su.id_student
+    WHERE st.id_student = student_id
+    GROUP BY su.name;
+
+    RETURN CONCAT('Nombre: ', student_name, ', Cursos: ', course_count);
 END//
 DELIMITER ;
 #Función para contar la cantidad de reservas en una categoría específica

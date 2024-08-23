@@ -65,7 +65,7 @@ create table Reservation(
     id_category_reservation int,
 	constraint fk_reservation_student foreign key(id_student) references Student(id_student),
 	constraint fk_reservation_category foreign key(id_category_reservation) references Category_reservation(id_category_reservation),
-	date date not null,
+	date_reservation date not null,
 	start_time time not null,
     end_time time not null
 );
@@ -111,7 +111,7 @@ create table Exam(
 	id_exam int primary key auto_increment,
 	id_course int,
     constraint fk_course_exam foreign key(id_course) references Course(id_course),
-    date date not null,
+    date_exam date not null,
     type varchar(10) not null,
     start_time time not null,
     end_time time not null,

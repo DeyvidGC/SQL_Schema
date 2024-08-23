@@ -1,11 +1,13 @@
-#Vista para ver el detalle de los estudiantes
+use upc;
+#Vista para ver el detalle de los estudiantes segun su curso
 CREATE VIEW StudentCourseDetails AS
-SELECT s.id_student, s.name AS student_name, c.name AS course_name, m.mark AS exam_mark
+SELECT s.id_student, s.name AS student_name, c.name AS course_name, avg(m.mark) AS exam_mark
 FROM Student s
-JOIN Student_course sc ON s.id_student = sc.id_student
+left join Student_course sc ON s.id_student = sc.id_student
 JOIN Course c ON sc.id_course = c.id_course
 JOIN Exam e ON c.id_course = e.id_course
-JOIN Mark m ON e.id_exam = m.id_exam;
+JOIN Mark m ON e.id_exam = m.id_exam
+group by s.id_student, s.name, c.name;
 
 #Vista para ver el horario de clases de todos los cursos
 CREATE VIEW CourseSchedules AS

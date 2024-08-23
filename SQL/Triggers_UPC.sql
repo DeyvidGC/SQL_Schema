@@ -1,13 +1,5 @@
+use upc;
 #Trigger para actualizar la edad del estudiante
-DELIMITER //
-CREATE TRIGGER update_student_age
-BEFORE INSERT ON Student
-FOR EACH ROW
-BEGIN
-    SET NEW.age = GetStudentAge(NEW.birthday);
-END//
-DELIMITER ;
-
 DELIMITER //
 CREATE TRIGGER update_student_age_on_update
 BEFORE UPDATE ON Student
@@ -41,7 +33,7 @@ BEGIN
         SELECT 1
         FROM Reservation r
         WHERE r.id_student = NEW.id_student
-          AND r.date = NEW.date
+          AND r.date_reservation = NEW.date_reservation
           AND (
               (r.start_time < NEW.end_time AND r.end_time > NEW.start_time)
           )
